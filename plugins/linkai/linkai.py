@@ -53,13 +53,13 @@ class LinkAI(Plugin):
             file_path = context.content
             if not LinkSummary().check_file(file_path, self.sum_config):
                 return
-            _send_info(e_context, "正在为你加速生成摘要，请稍后")
+            _send_info(e_context, "感谢分享，我来学习一下")
             res = LinkSummary().summary_file(file_path)
             if not res:
                 _set_reply_text("因为神秘力量无法获取文章内容，请稍后再试吧", e_context, level=ReplyType.TEXT)
                 return
             USER_FILE_MAP[_find_user_id(context) + "-sum_id"] = res.get("summary_id")
-            _set_reply_text(res.get("summary") + "\n\n💬 发送 \"开启对话\" 可以开启与文件内容的对话", e_context, level=ReplyType.TEXT)
+            _set_reply_text(res.get("summary") + "", e_context, level=ReplyType.TEXT)
             os.remove(file_path)
             return
 
@@ -67,12 +67,12 @@ class LinkAI(Plugin):
                 (context.type == ContextType.TEXT and LinkSummary().check_url(context.content)):
             if not LinkSummary().check_url(context.content):
                 return
-            _send_info(e_context, "正在为你加速生成摘要，请稍后")
+            _send_info(e_context, "感谢分享，我来学习一下")
             res = LinkSummary().summary_url(context.content)
             if not res:
                 _set_reply_text("因为神秘力量无法获取文章内容，请稍后再试吧~", e_context, level=ReplyType.TEXT)
                 return
-            _set_reply_text(res.get("summary") + "\n\n💬 发送 \"开启对话\" 可以开启与文章内容的对话", e_context, level=ReplyType.TEXT)
+            _set_reply_text(res.get("summary") + "", e_context, level=ReplyType.TEXT)
             USER_FILE_MAP[_find_user_id(context) + "-sum_id"] = res.get("summary_id")
             return
 
