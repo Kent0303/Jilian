@@ -120,7 +120,7 @@ def _check(func):
 
 
 @wework.msg_register(
-    [ntwork.MT_RECV_TEXT_MSG, ntwork.MT_RECV_IMAGE_MSG, 11072, ntwork.MT_RECV_VOICE_MSG])
+    [ntwork.MT_RECV_TEXT_MSG, ntwork.MT_RECV_IMAGE_MSG, 11072, ntwork.MT_RECV_LINK_CARD_MSG,ntwork.MT_RECV_FILE_MSG, ntwork.MT_RECV_VOICE_MSG])
 def all_msg_handler(wework_instance: ntwork.WeWork, message):
     logger.debug(f"收到消息: {message}")
     if 'data' in message:
@@ -319,5 +319,8 @@ class WeworkChannel(ChatChannel):
                 wework.send_video(receiver, video_path)
             logger.info("[WX] sendVideo, receiver={}".format(receiver))
         elif reply.type == ReplyType.VOICE:
+            current_dir = os.getcwd()
+            voice_file = reply.content.split("/")[-1]
+            reply.content = os.path.join(current_dir, "tmp", voice_file)
             wework.send_file(receiver, reply.content)
             logger.info("[WX] sendFile={}, receiver={}".format(reply.content, receiver))
